@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-navy:       #163061;
+    --color-navy-dark:  #0B1933;
+    --color-gold:       #C98B1A;
+    --color-gold-light: #E8A228;
+    --color-fg:         #0F1B36;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* ── Scrollbar sobre ── */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #CBD5E0 transparent;
+  }
+
+  *::-webkit-scrollbar        { width: 5px; height: 5px; }
+  *::-webkit-scrollbar-track  { background: transparent; }
+  *::-webkit-scrollbar-thumb  { background-color: #CBD5E0; border-radius: 8px; }
+  *::-webkit-scrollbar-thumb:hover { background-color: #A0AEC0; }
+
+  /* ── Focus ring navy accessible ── */
+  *:focus-visible {
+    outline: 2px solid var(--color-navy);
+    outline-offset: 2px;
+  }
+
+  /* ── Cibles tactiles ≥ 44px mobile (WCAG 2.5.5) ── */
+  @media (max-width: 768px) {
+    button, [role="button"], a, input, select, textarea {
+      min-height: 44px;
+    }
+  }
+}
+
+/* ── Animations landing page ── */
+@keyframes landing-bounce {
+  0%, 100% { transform: translateY(0); opacity: 1; }
+  50% { transform: translateY(6px); opacity: 0.5; }
+}
+
+@keyframes landing-pulse-glow {
+  0%, 100% { box-shadow: 0 0 6px rgba(232,162,40,0.5); }
+  50% { box-shadow: 0 0 14px rgba(232,162,40,0.9); }
+}
+
+@keyframes landing-fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animate-landing-bounce {
+    animation: landing-bounce 2s ease-in-out infinite;
+  }
+  .animate-landing-pulse {
+    animation: landing-pulse-glow 2.5s ease-in-out infinite;
+  }
+  .animate-landing-fade-up {
+    animation: landing-fade-up 0.6s ease-out forwards;
+  }
+
+  /* Section heading avec trait or — utilisé dans admin/page et employee/page */
+  .section-heading {
+    position: relative;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #0F1B36;
+    padding-left: 0.75rem;
+  }
+
+  .section-heading::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0.25rem;
+    height: 1.25rem;
+    border-radius: 9999px;
+    background-color: var(--color-gold);
+  }
+}

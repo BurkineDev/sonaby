@@ -1,0 +1,24 @@
+{
+  "name": "cyberguard-sonabhy",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Plateforme de sensibilisation cybersécurité SONABHY — WendTech Lot 2",
+  "scripts": {
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm --filter web build",
+    "lint": "pnpm --filter web lint",
+    "test": "pnpm --filter web test",
+    "test:e2e": "pnpm --filter web test:e2e",
+    "db:types": "supabase gen types typescript --local > packages/db/src/types.ts",
+    "db:reset": "supabase db reset",
+    "db:push": "supabase db push"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319"
+}

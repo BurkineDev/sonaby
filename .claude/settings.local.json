@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc:*)",
+      "Bash(npx next:*)",
+      "Bash(ls /Users/aristidesawadogo/Documents/Claude/Projects/sonabyv1/apps/web/.env*)",
+      "Bash(supabase --version)",
+      "Bash(supabase status:*)",
+      "Bash(open -a Docker)",
+      "Bash(docker info:*)",
+      "Bash(supabase start:*)",
+      "Bash(pnpm dev:*)",
+      "Bash(echo \"PID: $!\")",
+      "mcp__claude_ai_Supabase__list_projects",
+      "mcp__claude_ai_Supabase__apply_migration",
+      "mcp__claude_ai_Supabase__list_migrations",
+      "mcp__claude_ai_Supabase__execute_sql",
+      "Bash(supabase link:*)",
+      "Bash(supabase login:*)",
+      "mcp__claude_ai_Supabase__get_logs",
+      "Bash(python3 -c ':*)"
+    ]
+  }
+}
