@@ -38,13 +38,16 @@ export async function updateSession(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Routes publiques — pas de redirection
-  const publicPaths = [
+  const publicExactPaths = ["/", "/welcome"];
+  const publicPathPrefixes = [
     "/auth/login",
     "/auth/callback",
     "/phishing/", // pages de tracking phishing — publiques avec token HMAC
     "/phishing-landing/",
   ];
-  const isPublicPath = publicPaths.some((p) => pathname.startsWith(p));
+  const isPublicPath =
+    publicExactPaths.includes(pathname) ||
+    publicPathPrefixes.some((p) => pathname.startsWith(p));
 
   if (!user && !isPublicPath) {
     const url = request.nextUrl.clone();

@@ -31,6 +31,19 @@ export function LoginForm({ redirect, error }: Props) {
 
   const redirectPath = redirect ?? "/";
 
+  function getMagicLinkRedirectUrl() {
+    const configuredOrigin = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "");
+    const callbackUrl = new URL(
+      "/auth/callback",
+      configuredOrigin || window.location.origin
+    );
+    callbackUrl.searchParams.set(
+      "redirect",
+      redirectPath.startsWith("/") ? redirectPath : "/"
+    );
+    return callbackUrl.toString();
+  }
+
   async function handleMagicLink(e: React.FormEvent) {
     e.preventDefault();
     setFeedback(null);
@@ -39,7 +52,7 @@ export function LoginForm({ redirect, error }: Props) {
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback?redirect=${encodeURIComponent(redirectPath)}`,
+          emailRedirectTo: getMagicLinkRedirectUrl(),
         },
       });
 
