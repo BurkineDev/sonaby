@@ -39,7 +39,7 @@ function AnimatedCounter({ target, suffix = "", duration = 2000 }: { target: num
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting && !started) setStarted(true); },
+      ([entry]) => { if (entry?.isIntersecting && !started) setStarted(true); },
       { threshold: 0.5 }
     );
     const el = document.getElementById(`counter-${target}-${suffix}`);
@@ -127,7 +127,7 @@ function NetworkIllustration() {
   return (
     <svg viewBox="0 0 300 260" fill="none" className="w-full h-full" aria-hidden="true">
       {edges.map(([a, b], i) => {
-        const na = nodes[a]!; const nb = nodes[b]!;
+        const na = nodes[a ?? 0]!; const nb = nodes[b ?? 0]!;
         return <line key={i} x1={na.x} y1={na.y} x2={nb.x} y2={nb.y}
           stroke="rgba(201,139,26,0.25)" strokeWidth="1.5" strokeDasharray="4 3" />;
       })}

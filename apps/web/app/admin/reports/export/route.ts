@@ -223,8 +223,9 @@ export async function GET(request: Request): Promise<NextResponse> {
 
   let pdfBuffer: Buffer;
   try {
-    pdfBuffer = await renderToBuffer(
-      React.createElement(ReportDocument, props)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    pdfBuffer = await (renderToBuffer as any)(
+      React.createElement(ReportDocument as any, props)
     );
   } catch (err) {
     console.error("[PDF export] renderToBuffer error:", err);
@@ -259,7 +260,7 @@ export async function GET(request: Request): Promise<NextResponse> {
   const dateStr = new Date().toISOString().split("T")[0]!;
   const filename = `rapport-cyberguard-sonabhy-${dateStr}.pdf`;
 
-  return new NextResponse(pdfBuffer, {
+  return new NextResponse(pdfBuffer as unknown as BodyInit, {
     status: 200,
     headers: {
       "Content-Type": "application/pdf",
