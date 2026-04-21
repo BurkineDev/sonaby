@@ -680,7 +680,8 @@ export function ReportDocument({
               </View>
               {topModules.map((mod, i) => (
                 <View key={i} style={i % 2 === 0 ? S.tableRow : S.tableRowAlt}>
-                  <Text style={[S.tdCell, { flex: 5 }]} numberOfLines={1}>{mod.title}</Text>
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                  <Text style={[S.tdCell, { flex: 5 }]} {...({ numberOfLines: 1 } as any)}>{mod.title}</Text>
                   <Text style={[S.tdMuted, { flex: 2 }]}>{kindLabel(mod.kind)}</Text>
                   <Text style={[S.tdCell, { flex: 1, textAlign: "right", fontFamily: "Helvetica-Bold" }]}>
                     {mod.completion_count ?? "—"}
