@@ -10,17 +10,32 @@ export default async function EmployeeLayout({
   const supabase = await createClient();
   const {
     data: { user },
+    error: authError,
   } = await supabase.auth.getUser();
 
-  if (!user) redirect("/auth/login");
+  if (authError || !user) redirect("/auth/login");
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("role, onboarding_done, full_name")
-    .eq("id", user.id)
-    .single();
+  let profile: { role?: string | null; onboarding_done?: boolean | null } | null = null;
+  let profileError: { message?: string } | null = null;
 
-  if (!profile?.onboarding_done) redirect("/onboarding");
+  try {
+    const result = await supabase
+      .from("profiles")
+      .select("role, onboarding_done")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    profile = result.data;
+    profileError = result.error;
+  } catch (err) {
+    console.error("[EmployeeLayout] Profile lookup failed:", err);
+  }
+
+  if (!profile && !profileError) redirect("/onboarding");
+  if (profile && !profile.onboarding_done) redirect("/onboarding");
+  if (profileError) {
+    console.error("[EmployeeLayout] Profile query error:", profileError.message);
+  }
 
   return (
     <div className="min-h-screen bg-bg flex flex-col">
@@ -28,7 +43,7 @@ export default async function EmployeeLayout({
       <main className="flex-1 pb-20 md:pb-0">{children}</main>
 
       {/* Navigation bottom (mobile) */}
-      <BottomNav role={profile.role} />
+      <BottomNav role={profile?.role ?? "user"} />
     </div>
   );
 }

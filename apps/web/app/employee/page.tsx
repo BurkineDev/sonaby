@@ -15,6 +15,28 @@ type DashboardModule = {
   topic_tags: string[];
 };
 
+type EmployeeProfile = {
+  full_name?: string | null;
+  departments?: { name?: string | null } | Array<{ name?: string | null }> | null;
+};
+
+type EmployeeScore = {
+  score?: number | string | null;
+  quiz_component?: number | string | null;
+  phishing_component?: number | string | null;
+  engagement_component?: number | string | null;
+  snapshot_date?: string | null;
+};
+
+type EmployeeCompletion = {
+  modules?: unknown;
+};
+
+function toNumber(value: unknown, fallback = 0) {
+  const numberValue = typeof value === "number" ? value : Number(value);
+  return Number.isFinite(numberValue) ? numberValue : fallback;
+}
+
 function normalizeModule(value: unknown): DashboardModule | null {
   const row = Array.isArray(value) ? value[0] : value;
 
@@ -39,6 +61,11 @@ function normalizeModule(value: unknown): DashboardModule | null {
   };
 }
 
+function getDepartmentName(departments: EmployeeProfile["departments"]) {
+  const department = Array.isArray(departments) ? departments[0] : departments;
+  return department?.name ?? "SONABHY";
+}
+
 export default async function EmployeeDashboard() {
   const supabase = await createClient();
   const {
@@ -46,57 +73,99 @@ export default async function EmployeeDashboard() {
   } = await supabase.auth.getUser();
   if (!user) return null;
 
-  const [{ data: profile }, { data: scores }, { data: modules }] = await Promise.all([
-    supabase
-      .from("profiles")
-      .select("full_name, department_id, departments(name)")
-      .eq("id", user.id)
-      .single(),
+  let profile: EmployeeProfile | null = null;
+  let scores: EmployeeScore[] = [];
+  let modules: EmployeeCompletion[] = [];
 
-    supabase
-      .from("risk_scores")
-      .select("score, quiz_component, phishing_component, engagement_component, snapshot_date")
-      .eq("user_id", user.id)
-      .order("snapshot_date", { ascending: false })
-      .limit(2),
+  try {
+    const [profileResult, scoreResult, moduleResult] = await Promise.all([
+      supabase
+        .from("profiles")
+        .select("full_name, departments(name)")
+        .eq("id", user.id)
+        .maybeSingle(),
 
-    supabase
-      .from("module_completions")
-      .select("module_id, status, modules(id, title, kind, estimated_minutes, topic_tags)")
-      .eq("user_id", user.id)
-      .in("status", ["started"])
-      .limit(3),
-  ]);
+      supabase
+        .from("risk_scores")
+        .select("score, quiz_component, phishing_component, engagement_component, snapshot_date")
+        .eq("user_id", user.id)
+        .order("snapshot_date", { ascending: false })
+        .limit(2),
+
+      supabase
+        .from("module_completions")
+        .select("modules(id, title, kind, estimated_minutes, topic_tags)")
+        .eq("user_id", user.id)
+        .in("status", ["started"])
+        .limit(3),
+    ]);
+
+    if (profileResult.error) {
+      console.error("[EmployeeDashboard] Profile query error:", profileResult.error.message);
+    }
+    if (scoreResult.error) {
+      console.error("[EmployeeDashboard] Scores query error:", scoreResult.error.message);
+    }
+    if (moduleResult.error) {
+      console.error("[EmployeeDashboard] Modules query error:", moduleResult.error.message);
+    }
+
+    profile = profileResult.data as EmployeeProfile | null;
+    scores = Array.isArray(scoreResult.data) ? (scoreResult.data as EmployeeScore[]) : [];
+    modules = Array.isArray(moduleResult.data)
+      ? (moduleResult.data as EmployeeCompletion[])
+      : [];
+  } catch (err) {
+    console.error("[EmployeeDashboard] Dashboard queries failed:", err);
+  }
 
   const currentScore  = scores?.[0];
   const previousScore = scores?.[1];
+  const currentScoreValue =
+    currentScore?.score !== undefined && currentScore?.score !== null
+      ? toNumber(currentScore.score)
+      : null;
+  const currentQuizComponent = toNumber(currentScore?.quiz_component);
+  const currentPhishingComponent =
+    currentScore?.phishing_component !== undefined &&
+    currentScore?.phishing_component !== null
+      ? toNumber(currentScore.phishing_component)
+      : null;
   const scoreDelta =
     currentScore && previousScore
-      ? currentScore.score - previousScore.score
+      ? toNumber(currentScore.score) - toNumber(previousScore.score)
       : null;
 
   const firstName = profile?.full_name?.split(" ")[0] ?? "vous";
-  const deptName =
-    profile?.departments && "name" in profile.departments
-      ? (profile.departments as { name: string }).name
-      : "SONABHY";
+  const deptName = getDepartmentName(profile?.departments);
 
-  const { data: suggestedModules } =
-    !modules || modules.length === 0
-      ? await supabase
+  let suggestedModules: unknown[] = [];
+
+  if (!modules || modules.length === 0) {
+    try {
+      const { data, error } = await supabase
           .from("modules")
           .select("id, title, kind, estimated_minutes, topic_tags")
           .eq("is_published", true)
           .eq("kind", "micro_lesson")
-          .limit(3)
-      : { data: [] };
+          .limit(3);
+
+      if (error) {
+        console.error("[EmployeeDashboard] Suggested modules query error:", error.message);
+      }
+
+      suggestedModules = Array.isArray(data) ? data : [];
+    } catch (err) {
+      console.error("[EmployeeDashboard] Suggested modules lookup failed:", err);
+    }
+  }
 
   const activeModules = (modules ?? [])
     .map((item) =>
       normalizeModule((item as { modules?: unknown }).modules)
     )
     .filter((mod): mod is DashboardModule => mod !== null);
-  const suggestedModuleList = (suggestedModules ?? [])
+  const suggestedModuleList = suggestedModules
     .map((item) => normalizeModule(item))
     .filter((mod): mod is DashboardModule => mod !== null);
   const dashboardModules =
@@ -149,11 +218,11 @@ export default async function EmployeeDashboard() {
 
       {/* ── Score Card (chevauche le header) ──────────────────────────────── */}
       <div className="px-5 -mt-4 max-w-lg mx-auto">
-        {currentScore ? (
+        {currentScoreValue !== null ? (
           <ScoreCard
-            score={currentScore.score}
+            score={currentScoreValue}
             delta={scoreDelta}
-            snapshotDate={currentScore.snapshot_date}
+            snapshotDate={currentScore?.snapshot_date ?? new Date().toISOString()}
           />
         ) : (
           <div
@@ -219,7 +288,7 @@ export default async function EmployeeDashboard() {
         </section>
 
         {/* Mini-stats si score disponible */}
-        {currentScore && (
+        {currentScoreValue !== null && (
           <section aria-labelledby="stats-heading">
             <h2 id="stats-heading" className="section-heading mb-4">
               Détail de votre score
@@ -249,14 +318,14 @@ export default async function EmployeeDashboard() {
                   className="text-3xl font-bold font-mono"
                   style={{ color: "#163061" }}
                 >
-                  {Math.round(currentScore.quiz_component)}
+                  {Math.round(currentQuizComponent)}
                 </p>
                 <p className="text-xs text-fg-subtle mt-0.5">/ 100 points</p>
                 <div className="mt-3 w-full h-1.5 rounded-full" style={{ backgroundColor: "#E4E8F0" }}>
                   <div
                     className="h-full rounded-full transition-all"
                     style={{
-                      width: `${Math.round(currentScore.quiz_component)}%`,
+                      width: `${Math.round(currentQuizComponent)}%`,
                       backgroundColor: "#163061",
                     }}
                   />
@@ -287,22 +356,22 @@ export default async function EmployeeDashboard() {
                   className="text-3xl font-bold font-mono"
                   style={{
                     color:
-                      currentScore.phishing_component !== null
+                      currentPhishingComponent !== null
                         ? "#27AE60"
                         : "#A0AEC0",
                   }}
                 >
-                  {currentScore.phishing_component !== null
-                    ? Math.round(currentScore.phishing_component)
+                  {currentPhishingComponent !== null
+                    ? Math.round(currentPhishingComponent)
                     : "—"}
                 </p>
                 <p className="text-xs text-fg-subtle mt-0.5">/ 100 points</p>
-                {currentScore.phishing_component !== null && (
+                {currentPhishingComponent !== null && (
                   <div className="mt-3 w-full h-1.5 rounded-full" style={{ backgroundColor: "#E4E8F0" }}>
                     <div
                       className="h-full rounded-full transition-all"
                       style={{
-                        width: `${Math.round(currentScore.phishing_component)}%`,
+                        width: `${Math.round(currentPhishingComponent)}%`,
                         backgroundColor: "#27AE60",
                       }}
                     />
