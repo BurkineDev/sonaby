@@ -31,16 +31,33 @@ export function LoginForm({ redirect, error }: Props) {
 
   const redirectPath = redirect ?? "/";
 
+  function getSafeRedirectPath() {
+    return redirectPath.startsWith("/") && !redirectPath.startsWith("//")
+      ? redirectPath
+      : "/";
+  }
+
+  function getAppOrigin() {
+    const configuredUrl = process.env.NEXT_PUBLIC_APP_URL?.trim();
+
+    if (!configuredUrl) {
+      return window.location.origin;
+    }
+
+    const urlWithProtocol = /^https?:\/\//i.test(configuredUrl)
+      ? configuredUrl
+      : `https://${configuredUrl}`;
+
+    try {
+      return new URL(urlWithProtocol).origin;
+    } catch {
+      return window.location.origin;
+    }
+  }
+
   function getMagicLinkRedirectUrl() {
-    const configuredOrigin = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "");
-    const callbackUrl = new URL(
-      "/auth/callback",
-      configuredOrigin || window.location.origin
-    );
-    callbackUrl.searchParams.set(
-      "redirect",
-      redirectPath.startsWith("/") ? redirectPath : "/"
-    );
+    const callbackUrl = new URL("/auth/callback", getAppOrigin());
+    callbackUrl.searchParams.set("redirect", getSafeRedirectPath());
     return callbackUrl.toString();
   }
 
@@ -49,19 +66,27 @@ export function LoginForm({ redirect, error }: Props) {
     setFeedback(null);
 
     startTransition(async () => {
-      const { error } = await supabase.auth.signInWithOtp({
-        email,
-        options: {
-          emailRedirectTo: getMagicLinkRedirectUrl(),
-        },
-      });
+      try {
+        const { error } = await supabase.auth.signInWithOtp({
+          email,
+          options: {
+            emailRedirectTo: getMagicLinkRedirectUrl(),
+          },
+        });
 
-      if (error) {
-        setFeedback({ type: "error", message: "Erreur lors de l'envoi. Vérifiez votre adresse email." });
-      } else {
+        if (error) {
+          setFeedback({ type: "error", message: "Erreur lors de l'envoi. Vérifiez votre adresse email." });
+        } else {
+          setFeedback({
+            type: "success",
+            message: "Lien de connexion envoyé sur votre messagerie SONABHY. Vérifiez vos spams si besoin.",
+          });
+        }
+      } catch (err) {
+        console.error("[Login] Magic link error:", err);
         setFeedback({
-          type: "success",
-          message: "Lien de connexion envoyé sur votre messagerie SONABHY. Vérifiez vos spams si besoin.",
+          type: "error",
+          message: "Impossible d'envoyer le lien pour le moment. Réessayez dans quelques instants.",
         });
       }
     });
