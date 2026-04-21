@@ -7,6 +7,38 @@ import Link from "next/link";
 
 export const metadata: Metadata = { title: "Tableau de bord — CyberGuard SONABHY" };
 
+type DashboardModule = {
+  id: string;
+  title: string;
+  kind: string;
+  estimated_minutes: number;
+  topic_tags: string[];
+};
+
+function normalizeModule(value: unknown): DashboardModule | null {
+  const row = Array.isArray(value) ? value[0] : value;
+
+  if (!row || typeof row !== "object") {
+    return null;
+  }
+
+  const record = row as Record<string, unknown>;
+  if (typeof record.id !== "string") {
+    return null;
+  }
+
+  return {
+    id: record.id,
+    title: typeof record.title === "string" ? record.title : "Module de formation",
+    kind: typeof record.kind === "string" ? record.kind : "micro_lesson",
+    estimated_minutes:
+      typeof record.estimated_minutes === "number" ? record.estimated_minutes : 5,
+    topic_tags: Array.isArray(record.topic_tags)
+      ? record.topic_tags.filter((tag): tag is string => typeof tag === "string")
+      : [],
+  };
+}
+
 export default async function EmployeeDashboard() {
   const supabase = await createClient();
   const {
@@ -58,6 +90,17 @@ export default async function EmployeeDashboard() {
           .eq("kind", "micro_lesson")
           .limit(3)
       : { data: [] };
+
+  const activeModules = (modules ?? [])
+    .map((item) =>
+      normalizeModule((item as { modules?: unknown }).modules)
+    )
+    .filter((mod): mod is DashboardModule => mod !== null);
+  const suggestedModuleList = (suggestedModules ?? [])
+    .map((item) => normalizeModule(item))
+    .filter((mod): mod is DashboardModule => mod !== null);
+  const dashboardModules =
+    activeModules.length > 0 ? activeModules : suggestedModuleList;
 
   // Calcul heure locale pour message de bienvenue contextuel
   const hour = new Date().getHours();
@@ -140,7 +183,7 @@ export default async function EmployeeDashboard() {
         <section aria-labelledby="modules-heading">
           <div className="flex items-center justify-between mb-4">
             <h2 id="modules-heading" className="section-heading">
-              {modules && modules.length > 0 ? "En cours" : "Recommandés pour vous"}
+              {activeModules.length > 0 ? "En cours" : "Recommandés pour vous"}
             </h2>
             <Link
               href="/employee/parcours"
@@ -153,38 +196,24 @@ export default async function EmployeeDashboard() {
           </div>
 
           <div className="space-y-3">
-            {(modules && modules.length > 0 ? modules : suggestedModules ?? []).map(
-              (item) => {
-                const mod =
-                  modules && modules.length > 0 && "modules" in item
-                    ? (item as unknown as {
-                        modules: {
-                          id: string;
-                          title: string;
-                          kind: string;
-                          estimated_minutes: number;
-                          topic_tags: string[];
-                        };
-                      }).modules
-                    : (item as unknown as {
-                        id: string;
-                        title: string;
-                        kind: string;
-                        estimated_minutes: number;
-                        topic_tags: string[];
-                      });
-                if (!mod) return null;
-                return (
-                  <ModuleCard
-                    key={mod.id}
-                    id={mod.id}
-                    title={mod.title}
-                    kind={mod.kind}
-                    estimatedMinutes={mod.estimated_minutes}
-                    topicTags={mod.topic_tags}
-                  />
-                );
-              }
+            {dashboardModules.map((mod) => (
+              <ModuleCard
+                key={mod.id}
+                id={mod.id}
+                title={mod.title}
+                kind={mod.kind}
+                estimatedMinutes={mod.estimated_minutes}
+                topicTags={mod.topic_tags}
+              />
+            ))}
+            {dashboardModules.length === 0 && (
+              <div
+                className="rounded-xl border bg-white p-5 text-sm text-fg-muted shadow-sm"
+                style={{ borderColor: "#DDE2EE" }}
+              >
+                Votre espace est prêt. Les modules de formation apparaîtront ici dès
+                qu'ils seront publiés ou assignés.
+              </div>
             )}
           </div>
         </section>

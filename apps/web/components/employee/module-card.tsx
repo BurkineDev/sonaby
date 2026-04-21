@@ -5,11 +5,11 @@ import {
 } from "lucide-react";
 
 interface Props {
-  id: string;
-  title: string;
-  kind: string;
-  estimatedMinutes: number;
-  topicTags: string[];
+  id?: string | null;
+  title?: string | null;
+  kind?: string | null;
+  estimatedMinutes?: number | null;
+  topicTags?: string[] | null;
   progress?: number | undefined;
   completed?: boolean | undefined;
   score?: number | undefined;
@@ -88,14 +88,19 @@ export function ModuleCard({
   score,
   difficulty,
 }: Props) {
-  const meta  = KIND_META[kind] ?? KIND_META["micro_lesson"]!;
-  const isJIT = kind === "jit_remediation";
+  const safeKind = kind ?? "micro_lesson";
+  const safeTitle = title?.trim() || "Module de formation";
+  const safeEstimatedMinutes = estimatedMinutes ?? 5;
+  const safeTopicTags = Array.isArray(topicTags) ? topicTags : [];
+  const href = id ? `/employee/modules/${id}` : "/employee/parcours";
+  const meta  = KIND_META[safeKind] ?? KIND_META["micro_lesson"]!;
+  const isJIT = safeKind === "jit_remediation";
   const filledDots = difficulty ? (DIFF_DOTS[difficulty] ?? 0) : 0;
   const scoreColor = score !== undefined ? SCORE_COLOR(score) : undefined;
 
   return (
     <Link
-      href={`/employee/modules/${id}`}
+      href={href}
       className="group block rounded-2xl bg-white border overflow-hidden cursor-pointer transition-all duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy"
       style={{
         borderColor: isJIT ? "#E67E2250" : "#DDE2EE",
@@ -113,7 +118,7 @@ export function ModuleCard({
           ? "0 2px 8px rgba(230,126,34,0.12)"
           : "0 2px 6px rgba(22,48,97,0.06)";
       }}
-      aria-label={`${meta.label} : ${title}, ${estimatedMinutes} minutes${completed ? ", terminé" : ""}${score !== undefined ? `, score ${Math.round(score)}/100` : ""}`}
+      aria-label={`${meta.label} : ${safeTitle}, ${safeEstimatedMinutes} minutes${completed ? ", terminé" : ""}${score !== undefined ? `, score ${Math.round(score)}/100` : ""}`}
     >
       <div className="flex">
         {/* ── Stripe gauche colorée ──────────────────────────── */}
@@ -196,14 +201,14 @@ export function ModuleCard({
               className="text-sm font-semibold line-clamp-2 leading-snug mb-1.5"
               style={{ color: completed ? "#4A5568" : "#0F1B36" }}
             >
-              {title}
+              {safeTitle}
             </p>
 
             {/* Tags + durée sur une ligne */}
             <div className="flex items-center justify-between gap-2">
-              {topicTags.length > 0 ? (
+              {safeTopicTags.length > 0 ? (
                 <div className="flex flex-wrap gap-1.5 min-w-0">
-                  {topicTags.slice(0, 2).map((tag) => (
+                  {safeTopicTags.slice(0, 2).map((tag) => (
                     <span
                       key={tag}
                       className="text-xs px-2 py-0.5 rounded-full font-medium"
@@ -220,7 +225,7 @@ export function ModuleCard({
               <div className="flex items-center gap-1 shrink-0">
                 <Clock className="w-3 h-3" style={{ color: "#A0AEC0" }} aria-hidden="true" />
                 <span className="text-xs" style={{ color: "#A0AEC0" }}>
-                  {estimatedMinutes} min
+                  {safeEstimatedMinutes} min
                 </span>
               </div>
             </div>
