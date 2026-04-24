@@ -221,19 +221,11 @@ export default async function ModuleCompletedPage({ params }: PageProps) {
         <div className="space-y-3 animate-fade-slide-up delay-500">
           <Link
             href="/employee/parcours"
-            className="flex items-center justify-center gap-2.5 w-full py-4 rounded-xl text-sm font-bold transition-all"
+            className="flex items-center justify-center gap-2.5 w-full py-4 rounded-xl text-sm font-bold transition-all hover:-translate-y-0.5 active:translate-y-0"
             style={{
               background: "linear-gradient(135deg, #E8A228, #C98B1A)",
               color: "white",
               boxShadow: "0 4px 20px rgba(232,162,40,0.35)",
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-1px)";
-              (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 6px 24px rgba(232,162,40,0.45)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLAnchorElement).style.transform = "";
-              (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 20px rgba(232,162,40,0.35)";
             }}
           >
             <Layers className="w-4 h-4" aria-hidden="true" />
