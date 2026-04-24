@@ -39,10 +39,10 @@ export default async function EmployeeLayout({
 
   return (
     <div className="min-h-screen bg-bg flex flex-col">
-      {/* Contenu principal — avec padding pour la bottom nav mobile */}
-      <main className="flex-1 pb-20 md:pb-0">{children}</main>
+      {/* md: left padding = sidebar width (w-60 = 240px) so content clears the fixed sidebar */}
+      <main className="flex-1 pb-20 md:pb-0 md:pl-60">{children}</main>
 
-      {/* Navigation bottom (mobile) */}
+      {/* Navigation bottom (mobile) + fixed sidebar (desktop) */}
       <BottomNav role={profile?.role ?? "user"} />
     </div>
   );

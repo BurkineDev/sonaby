@@ -56,7 +56,7 @@ export default async function ModulePage({ params }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-bg md:ml-56">
+    <div className="min-h-screen bg-bg">
       <ModuleRenderer
         moduleId={module.id}
         title={module.title}

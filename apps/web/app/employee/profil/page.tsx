@@ -88,7 +88,7 @@ export default async function ProfilPage() {
     : "—";
 
   return (
-    <div className="px-4 py-6 max-w-lg mx-auto space-y-8 md:ml-56">
+    <div className="px-4 py-6 max-w-lg mx-auto space-y-8">
       <h1 className="text-2xl font-semibold text-fg-DEFAULT">Mon profil</h1>
 
       {/* Informations personnelles */}

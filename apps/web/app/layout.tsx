@@ -1,17 +1,19 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Lexend, Fira_Code } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+const lexend = Lexend({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-lexend",
   display: "swap",
+  weight: ["300", "400", "500", "600", "700"],
 });
 
-const jetbrainsMono = JetBrains_Mono({
+const firaCode = Fira_Code({
   subsets: ["latin"],
   variable: "--font-mono",
   display: "swap",
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -30,7 +32,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#2563EB",
+  themeColor: "#163061",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -44,7 +46,7 @@ export default function RootLayout({
   return (
     <html lang="fr" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} font-sans bg-bg text-fg-DEFAULT antialiased`}
+        className={`${lexend.variable} ${firaCode.variable} font-sans bg-app text-fg antialiased`}
       >
         {children}
       </body>

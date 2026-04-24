@@ -34,7 +34,7 @@ export default async function ScorePage() {
     latest && first ? parseFloat((latest.score - first.score).toFixed(1)) : 0;
 
   return (
-    <div className="px-4 py-6 max-w-lg mx-auto space-y-6 md:ml-56">
+    <div className="px-4 py-6 max-w-lg mx-auto space-y-6">
       <h1 className="text-2xl font-semibold text-fg-DEFAULT">Mon score de vigilance</h1>
 
       {/* Score actuel */}

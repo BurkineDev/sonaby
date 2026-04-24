@@ -266,7 +266,7 @@ export default async function ParcoursPage() {
       </div>
 
       {/* ── Contenu principal ────────────────────────────────────────── */}
-      <div className="px-4 py-6 max-w-lg mx-auto space-y-8 md:ml-56">
+      <div className="px-4 py-6 max-w-lg mx-auto space-y-8">
 
         {/* ─ URGENTS (JIT) ─────────────────────────────────────────── */}
         {jitModules.length > 0 && (
