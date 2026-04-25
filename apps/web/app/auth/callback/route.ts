@@ -3,6 +3,18 @@ import { createClient } from "@/lib/supabase/server";
 import { logger } from "@/lib/logger";
 import type { EmailOtpType } from "@supabase/supabase-js";
 
+const OTP_TYPES = {
+  magiclink: true,
+  recovery: true,
+  invite: true,
+  email: true,
+  email_change: true,
+} as const;
+
+function isEmailOtpType(value: string): value is EmailOtpType {
+  return value in OTP_TYPES;
+}
+
 /**
  * Route Handler : callback OAuth/Magic Link Supabase Auth.
  * Échange le code PKCE pour une session, puis redirige.
@@ -25,15 +37,6 @@ export async function GET(request: NextRequest) {
   }
 
   const supabase = await createClient();
-  const allowedOtpTypes: readonly EmailOtpType[] = [
-    "magiclink",
-    "recovery",
-    "invite",
-    "email",
-    "email_change",
-    "email_change_new",
-    "email_change_current",
-  ] as const;
 
   if (code) {
     const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
@@ -42,10 +45,10 @@ export async function GET(request: NextRequest) {
       logger.error({ error: exchangeError.message }, "[Auth Callback] Échec échange code");
       return NextResponse.redirect(`${origin}/auth/login?error=exchange_failed`);
     }
-  } else if (tokenHash && typeParam && allowedOtpTypes.includes(typeParam as EmailOtpType)) {
+  } else if (tokenHash && typeParam && isEmailOtpType(typeParam)) {
     const { error: verifyError } = await supabase.auth.verifyOtp({
       token_hash: tokenHash,
-      type: typeParam as EmailOtpType,
+      type: typeParam,
     });
 
     if (verifyError) {
