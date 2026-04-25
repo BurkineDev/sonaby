@@ -16,6 +16,20 @@ interface Props {
   error?: string;
 }
 
+function getAuthErrorMessage(errorCode: string) {
+  switch (errorCode) {
+    case "missing_code":
+      return "Lien incomplet. Ouvrez le lien magique complet depuis votre email.";
+    case "exchange_failed":
+    case "otp_verification_failed":
+      return "Lien expiré ou déjà utilisé. Demandez un nouveau lien de connexion.";
+    case "no_user":
+      return "Session non trouvée après validation. Réessayez avec un nouveau lien.";
+    default:
+      return "Session expirée ou lien invalide. Reconnectez-vous.";
+  }
+}
+
 export function LoginForm({ redirect, error }: Props) {
   const router = useRouter();
   const supabase = createClient();
@@ -30,6 +44,12 @@ export function LoginForm({ redirect, error }: Props) {
   } | null>(null);
 
   const redirectPath = redirect ?? "/";
+  const demoAdminEmail = process.env.NEXT_PUBLIC_DEMO_ADMIN_EMAIL?.trim() ?? "";
+  const demoAdminPassword = process.env.NEXT_PUBLIC_DEMO_ADMIN_PASSWORD?.trim() ?? "";
+  const demoEmployeeEmail = process.env.NEXT_PUBLIC_DEMO_EMPLOYEE_EMAIL?.trim() ?? "";
+  const demoEmployeePassword = process.env.NEXT_PUBLIC_DEMO_EMPLOYEE_PASSWORD?.trim() ?? "";
+  const canUseDemoAdmin = Boolean(demoAdminEmail && demoAdminPassword);
+  const canUseDemoEmployee = Boolean(demoEmployeeEmail && demoEmployeePassword);
 
   function getSafeRedirectPath() {
     return redirectPath.startsWith("/") && !redirectPath.startsWith("//")
@@ -105,9 +125,51 @@ export function LoginForm({ redirect, error }: Props) {
           message: "Identifiants incorrects. Utilisez le lien magique si vous avez oublié votre mot de passe.",
         });
       } else {
-        router.push(redirectPath);
+        router.push(getSafeRedirectPath());
         router.refresh();
       }
+    });
+  }
+
+  function handleDemoLogin(target: "admin" | "employee") {
+    setFeedback(null);
+
+    const credentials =
+      target === "admin"
+        ? { email: demoAdminEmail, password: demoAdminPassword }
+        : { email: demoEmployeeEmail, password: demoEmployeePassword };
+
+    if (!credentials.email || !credentials.password) {
+      setFeedback({
+        type: "error",
+        message: "Comptes de démo non configurés. Définissez les variables NEXT_PUBLIC_DEMO_*.",
+      });
+      return;
+    }
+
+    startTransition(async () => {
+      const { error } = await supabase.auth.signInWithPassword(credentials);
+
+      if (error) {
+        setFeedback({
+          type: "error",
+          message:
+            target === "admin"
+              ? "Connexion admin de démo impossible. Vérifiez les identifiants de démo."
+              : "Connexion employé de démo impossible. Vérifiez les identifiants de démo.",
+        });
+        return;
+      }
+
+      const fallbackPath = target === "admin" ? "/admin" : "/employee";
+      const safeRedirectPath = getSafeRedirectPath();
+      const finalPath =
+        safeRedirectPath !== "/auth/login" && safeRedirectPath !== "/"
+          ? safeRedirectPath
+          : fallbackPath;
+
+      router.push(finalPath);
+      router.refresh();
     });
   }
 
@@ -146,7 +208,7 @@ export function LoginForm({ redirect, error }: Props) {
         {error && (
           <div role="alert" className="flex items-start gap-2 rounded-md p-3 mb-4 text-sm bg-red-50 text-risk-critical border border-red-200">
             <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
-            <span>Session expirée ou lien invalide. Reconnectez-vous.</span>
+            <span>{getAuthErrorMessage(error)}</span>
           </div>
         )}
 
@@ -221,6 +283,34 @@ export function LoginForm({ redirect, error }: Props) {
               : "Recevoir un lien de connexion par email"}
           </button>
         </div>
+
+        {(canUseDemoAdmin || canUseDemoEmployee) && (
+          <div className="mt-5 border-t pt-4">
+            <p className="text-xs text-fg-subtle mb-3 text-center">Accès rapide démo</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {canUseDemoEmployee && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={isPending}
+                  onClick={() => handleDemoLogin("employee")}
+                >
+                  Entrer côté Employé
+                </Button>
+              )}
+              {canUseDemoAdmin && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={isPending}
+                  onClick={() => handleDemoLogin("admin")}
+                >
+                  Entrer côté Admin
+                </Button>
+              )}
+            </div>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

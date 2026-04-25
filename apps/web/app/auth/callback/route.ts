@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { logger } from "@/lib/logger";
+import type { EmailOtpType } from "@supabase/supabase-js";
 
 /**
  * Route Handler : callback OAuth/Magic Link Supabase Auth.
@@ -9,6 +10,8 @@ import { logger } from "@/lib/logger";
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
+  const tokenHash = searchParams.get("token_hash");
+  const typeParam = searchParams.get("type");
   const error = searchParams.get("error");
   const errorDescription = searchParams.get("error_description");
   const redirectParam = searchParams.get("redirect") ?? "/";
@@ -21,17 +24,37 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(`${origin}/auth/login?error=${encodeURIComponent(error)}`);
   }
 
-  if (!code) {
-    logger.warn("[Auth Callback] Code PKCE manquant");
-    return NextResponse.redirect(`${origin}/auth/login?error=missing_code`);
-  }
-
   const supabase = await createClient();
-  const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+  const allowedOtpTypes: readonly EmailOtpType[] = [
+    "magiclink",
+    "recovery",
+    "invite",
+    "email",
+    "email_change",
+    "email_change_new",
+    "email_change_current",
+  ] as const;
 
-  if (exchangeError) {
-    logger.error({ error: exchangeError.message }, "[Auth Callback] Échec échange code");
-    return NextResponse.redirect(`${origin}/auth/login?error=exchange_failed`);
+  if (code) {
+    const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+
+    if (exchangeError) {
+      logger.error({ error: exchangeError.message }, "[Auth Callback] Échec échange code");
+      return NextResponse.redirect(`${origin}/auth/login?error=exchange_failed`);
+    }
+  } else if (tokenHash && typeParam && allowedOtpTypes.includes(typeParam as EmailOtpType)) {
+    const { error: verifyError } = await supabase.auth.verifyOtp({
+      token_hash: tokenHash,
+      type: typeParam as EmailOtpType,
+    });
+
+    if (verifyError) {
+      logger.error({ error: verifyError.message }, "[Auth Callback] Échec vérification OTP magic link");
+      return NextResponse.redirect(`${origin}/auth/login?error=otp_verification_failed`);
+    }
+  } else {
+    logger.warn({ codePresent: Boolean(code), tokenHashPresent: Boolean(tokenHash), typeParam }, "[Auth Callback] Paramètres de callback manquants");
+    return NextResponse.redirect(`${origin}/auth/login?error=missing_code`);
   }
 
   // Récupérer le profil pour voir si l'onboarding est terminé
