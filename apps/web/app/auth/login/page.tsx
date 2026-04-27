@@ -141,11 +141,6 @@ export default async function LoginPage({
             Problème de connexion ? Contactez la{" "}
             <span className="font-medium text-fg-muted">DSI SONABHY</span>.
           </p>
-          <p className="mt-2 text-[11px] text-fg-subtle text-center">
-            Mode démo rapide disponible si les variables{" "}
-            <code className="px-1 rounded bg-bg-subtle">NEXT_PUBLIC_DEMO_*</code>{" "}
-            sont configurées.
-          </p>
         </div>
       </div>
     </main>
