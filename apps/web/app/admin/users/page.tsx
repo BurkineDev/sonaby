@@ -77,7 +77,7 @@ export default async function UsersPage() {
   const activeCount = users.filter((u) => u.is_active).length;
   const consentCount = users.filter((u) => u.consent_phishing).length;
   const adminCount = users.filter((u) =>
-    ["admin", "super_admin"].includes(u.role)
+    ["admin", "rssi", "super_admin"].includes(u.role)
   ).length;
 
   return (

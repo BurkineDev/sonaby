@@ -45,7 +45,7 @@ export async function createCampaign(
     .eq("id", user.id)
     .single();
 
-  if (!profile || !["admin", "super_admin"].includes(profile.role)) {
+  if (!profile || !["admin", "rssi", "super_admin"].includes(profile.role)) {
     return { message: "Accès non autorisé" };
   }
 

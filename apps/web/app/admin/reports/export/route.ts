@@ -45,7 +45,7 @@ export async function GET(request: Request): Promise<NextResponse> {
     .eq("id", user.id)
     .single();
 
-  if (!profile || !["admin", "super_admin"].includes(profile.role)) {
+  if (!profile || !["admin", "rssi", "super_admin"].includes(profile.role)) {
     return new NextResponse("Accès non autorisé — rôle admin requis", {
       status: 403,
     });

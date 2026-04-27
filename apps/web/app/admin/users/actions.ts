@@ -30,7 +30,7 @@ export async function updateUserRole(
     .eq("id", user.id)
     .single();
 
-  if (!caller || !["admin", "super_admin"].includes(caller.role)) {
+  if (!caller || !["admin", "rssi", "super_admin"].includes(caller.role)) {
     return { error: "Accès non autorisé" };
   }
 
@@ -85,7 +85,7 @@ export async function toggleUserActive(
     .eq("id", user.id)
     .single();
 
-  if (!caller || !["admin", "super_admin"].includes(caller.role)) {
+  if (!caller || !["admin", "rssi", "super_admin"].includes(caller.role)) {
     return { error: "Accès non autorisé" };
   }
 

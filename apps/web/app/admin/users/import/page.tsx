@@ -19,7 +19,7 @@ export default async function ImportUsersPage() {
     .eq("id", user.id)
     .single();
 
-  if (!profile || !["admin", "super_admin"].includes(profile.role)) {
+  if (!profile || !["admin", "rssi", "super_admin"].includes(profile.role)) {
     redirect("/employee");
   }
 

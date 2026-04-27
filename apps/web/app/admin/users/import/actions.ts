@@ -98,7 +98,7 @@ export async function importUsers(formData: FormData): Promise<ImportResult> {
     .eq("id", user.id)
     .single();
 
-  if (!profile || !["admin", "super_admin"].includes(profile.role)) {
+  if (!profile || !["admin", "rssi", "super_admin"].includes(profile.role)) {
     throw new Error("Accès non autorisé — rôle admin requis");
   }
 

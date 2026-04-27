@@ -169,7 +169,7 @@ export async function archiveModule(moduleId: string): Promise<{ error?: string 
     .eq("id", user.id)
     .single();
 
-  if (!profile || !["admin", "super_admin"].includes(profile.role)) {
+  if (!profile || !["admin", "rssi", "super_admin"].includes(profile.role)) {
     return { error: "Accès non autorisé — rôle admin requis" };
   }
 
