@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { LoginForm } from "./login-form";
-import { Flame, Shield } from "lucide-react";
+import { Flame, Shield, ArrowLeft } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Connexion — CyberGuard SONABHY",
@@ -92,6 +93,17 @@ export default async function LoginPage({
 
       {/* ── Panneau droit : formulaire ─────────────────────────────────── */}
       <div className="flex-1 flex flex-col items-center justify-center px-6 py-12">
+        {/* Retour page d'accueil */}
+        <div className="w-full max-w-sm mb-6">
+          <Link
+            href="/welcome"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-fg-muted hover:text-navy transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" aria-hidden="true" />
+            Retour à l'accueil
+          </Link>
+        </div>
+
         {/* Logo mobile uniquement */}
         <div className="flex lg:hidden items-center gap-3 mb-10">
           <div
