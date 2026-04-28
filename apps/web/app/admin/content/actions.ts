@@ -11,7 +11,21 @@ import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { ModuleBodySchema } from "@/lib/shared";
 
-// ─── Schéma de création d'un module ──────────────────────────────────────────
+// ─── Utilitaire slug ─────────────────────────────────────────────────────────
+
+function slugify(text: string): string {
+  return text
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")   // retire les accents
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")      // garde alphanum + espaces + tirets
+    .trim()
+    .replace(/\s+/g, "-")              // espaces → tirets
+    .replace(/-+/g, "-")               // tirets multiples → un seul
+    .slice(0, 80);                     // limite la longueur
+}
+
+
 
 const TOPIC_TAGS = [
   "phishing_email", "phishing_sms", "phishing_whatsapp",
@@ -105,10 +119,15 @@ export async function createModule(
     };
   }
 
+  // Générer un slug unique : base + timestamp pour éviter les collisions
+  const baseSlug = slugify(parsed.data.title);
+  const slug = `${baseSlug}-${Date.now()}`;
+
   const { data, error } = await supabase
     .from("modules")
     .insert({
       organization_id: profile.organization_id,
+      slug,
       title: parsed.data.title,
       kind: parsed.data.kind,
       difficulty: parsed.data.difficulty,
