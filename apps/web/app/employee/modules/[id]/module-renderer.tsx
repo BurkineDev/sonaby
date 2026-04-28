@@ -855,7 +855,7 @@ export function ModuleRenderer({
   const meta = kindMeta[kind] ?? { label: "Formation", color: "#163061" };
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ backgroundColor: "#F0F2F8" }}>
+    <div className="h-screen flex flex-col overflow-hidden" style={{ backgroundColor: "#F0F2F8" }}>
       {/* ── En-tête sticky ──────────────────────────────────────────────── */}
       <header
         className="sticky top-0 z-20"
@@ -1025,12 +1025,13 @@ export function ModuleRenderer({
       {/* ── Navigation bas (modules linéaires) ──────────────────────────── */}
       {!isScenario && (
         <nav
-          className="sticky bottom-0 px-4 py-4"
+          className="shrink-0 px-4 py-4"
           style={{
             backgroundColor: "rgba(240,242,248,0.96)",
             borderTop: "1px solid #D1D9EC",
             backdropFilter: "blur(12px)",
             boxShadow: "0 -4px 20px rgba(22,48,97,0.10)",
+            paddingBottom: "calc(1rem + env(safe-area-inset-bottom))",
           }}
           aria-label="Navigation du module"
         >
@@ -1050,7 +1051,7 @@ export function ModuleRenderer({
             {/* Bouton suivant */}
             {!isLastBlock && (
               <button
-                className="flex-1 py-3.5 rounded-xl text-sm font-semibold text-white transition-all flex items-center justify-center gap-2"
+                className="flex-1 py-4 rounded-xl text-sm font-semibold text-white transition-all flex items-center justify-center gap-2"
                 style={{
                   background: canAdvance
                     ? "linear-gradient(135deg, #163061, #1F3F7A)"
@@ -1073,7 +1074,7 @@ export function ModuleRenderer({
               const blocked = isFinishing || (quizBlocks.length > 0 && !allQuizzesAnswered);
               return (
                 <button
-                  className="flex-1 py-3.5 rounded-xl text-sm font-bold text-white transition-all flex items-center justify-center gap-2"
+                  className="flex-1 py-4 rounded-xl text-sm font-bold text-white transition-all flex items-center justify-center gap-2"
                   style={{
                     background: blocked
                       ? "linear-gradient(135deg, #94A3B8, #64748B)"
@@ -1105,7 +1106,7 @@ export function ModuleRenderer({
             {/* Déjà complété */}
             {isCompleted && (
               <button
-                className="flex-1 py-3.5 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2"
+                className="flex-1 py-4 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2"
                 style={{
                   backgroundColor: "white",
                   border: "2px solid #163061",

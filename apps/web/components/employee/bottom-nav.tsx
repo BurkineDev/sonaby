@@ -19,13 +19,15 @@ const NAV_ITEMS = [
 export function BottomNav({ role }: Props) {
   const pathname = usePathname();
   const isAdmin = ["admin", "rssi", "super_admin"].includes(role);
+  // Course pages manage their own full-screen layout — hide the bottom bar
+  const isModulePage = pathname.startsWith("/employee/modules/");
 
   return (
     <>
-      {/* ── Mobile : barre glassmorphism ─────────────────────────── */}
+      {/* ── Mobile : barre glassmorphism (masquée pendant un cours) ── */}
       <nav
         aria-label="Navigation principale"
-        className="fixed bottom-0 left-0 right-0 z-50 md:hidden"
+        className={`fixed bottom-0 left-0 right-0 z-50 md:hidden ${isModulePage ? "hidden" : ""}`}
         style={{
           background: "rgba(255,255,255,0.92)",
           backdropFilter: "blur(16px)",
