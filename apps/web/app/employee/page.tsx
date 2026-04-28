@@ -139,37 +139,43 @@ export default async function EmployeeDashboard() {
   const firstName = profile?.full_name?.split(" ")[0] ?? "vous";
   const deptName = getDepartmentName(profile?.departments);
 
-  let suggestedModules: unknown[] = [];
-
-  if (!modules || modules.length === 0) {
-    try {
-      const { data, error } = await supabase
-          .from("modules")
-          .select("id, title, kind, estimated_minutes, topic_tags")
-          .eq("is_published", true)
-          .eq("kind", "micro_lesson")
-          .limit(3);
-
-      if (error) {
-        console.error("[EmployeeDashboard] Suggested modules query error:", error.message);
-      }
-
-      suggestedModules = Array.isArray(data) ? data : [];
-    } catch (err) {
-      console.error("[EmployeeDashboard] Suggested modules lookup failed:", err);
-    }
-  }
-
   const activeModules = (modules ?? [])
     .map((item) =>
       normalizeModule((item as { modules?: unknown }).modules)
     )
     .filter((mod): mod is DashboardModule => mod !== null);
-  const suggestedModuleList = suggestedModules
-    .map((item) => normalizeModule(item))
-    .filter((mod): mod is DashboardModule => mod !== null);
+
+  // Toujours charger les modules disponibles (pas encore commencés)
+  let suggestedModules: DashboardModule[] = [];
+  try {
+    const startedIds = activeModules.map((m) => m.id);
+    let suggestedQuery = supabase
+      .from("modules")
+      .select("id, title, kind, estimated_minutes, topic_tags")
+      .eq("is_published", true)
+      .not("kind", "eq", "jit_remediation")
+      .limit(3);
+
+    if (startedIds.length > 0) {
+      suggestedQuery = suggestedQuery.not("id", "in", `(${startedIds.join(",")})`);
+    }
+
+    const { data, error } = await suggestedQuery;
+    if (error) {
+      console.error("[EmployeeDashboard] Suggested modules query error:", error.message);
+    }
+    suggestedModules = (Array.isArray(data) ? data : [])
+      .map((item) => normalizeModule(item))
+      .filter((mod): mod is DashboardModule => mod !== null);
+  } catch (err) {
+    console.error("[EmployeeDashboard] Suggested modules lookup failed:", err);
+  }
+
+  // Modules affichés : en cours en premier, puis disponibles si moins de 3 en cours
   const dashboardModules =
-    activeModules.length > 0 ? activeModules : suggestedModuleList;
+    activeModules.length >= 3
+      ? activeModules.slice(0, 3)
+      : [...activeModules, ...suggestedModules].slice(0, 3);
 
   // Calcul heure locale pour message de bienvenue contextuel
   const hour = new Date().getHours();
@@ -252,7 +258,7 @@ export default async function EmployeeDashboard() {
         <section aria-labelledby="modules-heading">
           <div className="flex items-center justify-between mb-4">
             <h2 id="modules-heading" className="section-heading">
-              {activeModules.length > 0 ? "En cours" : "Recommandés pour vous"}
+              {activeModules.length > 0 ? "En cours & disponibles" : "Recommandés pour vous"}
             </h2>
             <Link
               href="/employee/parcours"

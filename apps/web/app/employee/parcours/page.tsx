@@ -120,14 +120,19 @@ export default async function ParcoursPage() {
     ...completed.map((c)  => c.module_id),
   ];
 
-  const { data: availableRaw } = await supabase
+  let availableQuery = supabase
     .from("modules")
     .select("id, title, kind, estimated_minutes, topic_tags, difficulty")
     .eq("is_published", true)
     .not("kind", "eq", "jit_remediation")
-    .not("id", "in", doneIds.length > 0 ? `(${doneIds.join(",")})` : "(null)")
     .order("difficulty", { ascending: true })
     .limit(20);
+
+  if (doneIds.length > 0) {
+    availableQuery = availableQuery.not("id", "in", `(${doneIds.join(",")})`);
+  }
+
+  const { data: availableRaw } = await availableQuery;
 
   const available = (availableRaw ?? []) as ModuleRow[];
 
