@@ -41,7 +41,7 @@ const RESTRICTED_ITEMS = [
 function NavLinks({
   role,
   pathname,
-  onClose,
+  onClose = () => {},
 }: {
   role: string;
   pathname: string;
