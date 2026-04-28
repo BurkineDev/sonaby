@@ -49,3 +49,12 @@
 ## Rappel échéance
 
 **Au plus tard jeudi 30 avril 2026 à 09h00 TU (d'après l'avis transmis).**
+
+
+## F. Présentation du lien vers vos travaux (important)
+
+- [ ] Préparer un lien unique vers le repo (ou dossier docs exporté en PDF) avec structure claire.
+- [ ] Ajouter un fichier "README de soumission" expliquant où trouver: démo, architecture, sécurité, KPI.
+- [ ] Vérifier que les captures d'écran et exports PDF sont lisibles sans accès technique.
+- [ ] Joindre un "dossier technique de l'application" (document 12) dans la soumission papier.
+- [ ] Joindre l'"annexe administrative identité" (document 13) avec pièces scannées correspondantes.

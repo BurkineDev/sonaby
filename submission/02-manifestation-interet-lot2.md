@@ -1,158 +1,135 @@
-# 2) Modèle de manifestation d'intérêt — Lot 2 (plateforme de sensibilisation cybersécurité SAAS)
+# 2) Manifestation d'intérêt — LOT 2 (version détaillée et présentable)
 
-> À adapter avec vos coordonnées légales exactes, RCCM, IFU, contacts et signatures.
+> **Référence consultation**: AMI N°2026-007/MICA/SONABHY
+> **Objet visé**: Lot 2 — Plateforme de sensibilisation en cybersécurité (SAAS)
 
-## A. Identification de la consultation
+---
 
-- **Objet**: Recrutement d'un cabinet pour la mise en place d'une plateforme de sensibilisation en cybersécurité (SAAS) au profit de la SONABHY (Lot 2).
-- **Référence**: Manifestation d'intérêt **N°2026-007/MICA/SONABHY**.
-- **Financement**: Budget SONABHY, exercice 2026.
+## A. Identification du candidat (renseignements réels connus)
+
+- **Enseigne commerciale**: **WEND TECH**
+- **Titulaire**: **WEND PEGRE ARISTIDE SAWADOGO**
+- **Forme juridique**: Personne physique (service)
+- **RCCM**: **BFBBD012025A1000864**
+- **IFU**: **00268427X**
+- **Adresse**: **S/C BP 1096 BOBO, Bobo-Dioulasso, Houet, Burkina Faso**
+- **Téléphone**: **(+226) 65 17 07 78**
+
+> Vérifier avant impression finale que ces informations correspondent exactement aux pièces scannées jointes (IFU et Carte professionnelle de commerçant).
+
+---
 
 ## B. Lettre de manifestation d'intérêt (texte prêt à signer)
 
 **Monsieur le Directeur de la Commande Publique,**
 
-Nous avons l'honneur de manifester notre intérêt pour la prestation relative au Lot 2 portant sur la mise en place d'une plateforme de sensibilisation en cybersécurité (SAAS) au profit de la SONABHY.
+Nous, soussigné **WEND TECH**, manifestons notre intérêt pour le **Lot 2** relatif à la mise en place d'une plateforme de sensibilisation en cybersécurité (SAAS) au profit de la SONABHY, dans le cadre de l'AMI **N°2026-007/MICA/SONABHY**.
 
-Notre cabinet dispose des compétences techniques, méthodologiques et organisationnelles pour concevoir, déployer et opérer un dispositif de sensibilisation cyber continu, mesurable et contextualisé aux réalités opérationnelles locales.
+Notre candidature est fondée sur une solution applicative déjà développée et documentée, couvrant les exigences structurantes du Lot 2:
 
-Notre approche repose sur:
-1. une mesure de référence initiale (baseline T0),
-2. un apprentissage continu, adaptatif et personnalisé,
-3. des mécanismes d'auto-évaluation régulière,
-4. des KPI comportementaux auditables,
-5. une réduction mesurable de l'exposition aux attaques d'ingénierie sociale,
-6. un suivi de la maturité cyber sur 12 mois,
-7. l'installation d'une culture de sécurité durable.
+1. établissement d'une baseline T0;
+2. apprentissage continu, adaptatif et personnalisé;
+3. auto-évaluation régulière des utilisateurs;
+4. KPI comportementaux mesurables;
+5. réduction mesurable de l'exposition aux attaques d'ingénierie sociale;
+6. suivi de maturité cyber sur 12 mois;
+7. installation durable d'une culture cybersécurité.
 
-Nous certifions l'exactitude des informations fournies et nous engageons, en cas de présélection, à présenter une proposition technique et financière conforme aux exigences de la SONABHY.
+Nous certifions l'exactitude des informations fournies et nous engageons, en cas de présélection, à transmettre une offre technique et financière conforme aux exigences de la SONABHY.
 
-Fait à [Ville], le [Date].
+Fait à **[Ville]**, le **[Date]**.
 
 **[Nom, qualité, signature, cachet]**
 
 ---
 
-## C. Présentation du candidat (2 pages max)
+## C. Description claire de l'application livrée (version terrain)
 
-### 1) Identité
-- Raison sociale
-- Forme juridique
-- Adresse siège
-- RCCM / IFU / N° contribuable
-- Contact principal + email + téléphone
+Notre application est une plateforme de sensibilisation cybersécurité opérationnelle, articulée autour de trois espaces:
 
-### 2) Résumé exécutif
-Nous accompagnons les organisations critiques sur le facteur humain de la cybersécurité, avec une approche orientée résultats mesurables (clic phishing, signalement, complétion, maturité).
+- **Espace Employé (mobile-first)**: onboarding, consentements, modules, score individuel, progression;
+- **Espace Manager**: indicateurs agrégés de département (sans exposition nominative par défaut);
+- **Espace Admin/RSSI**: pilotage campagnes phishing, contenus, rapports, audit.
 
-### 3) Années d'expérience
-- Nombre d'années en cybersécurité
-- Nombre d'années en formation/sensibilisation digitale
-- Nombre de projets comparables (énergie, administration, opérateurs critiques)
+### Fonctionnalités déjà présentes dans le produit
+
+1. **Onboarding utilisateur et consentement** (parcours d'activation et préférences).
+2. **Moteur de campagnes phishing simulées** avec tracking des événements.
+3. **Déclenchement de micro-remédiation Just-In-Time** après clic.
+4. **Moteur de scoring risque humain** (0-100) avec historique.
+5. **Tableaux de bord de pilotage** (employé, admin, reporting).
+6. **Contrôle d'accès par rôles** (RBAC) côté application + politiques RLS côté base.
+7. **Export de rapport PDF** pour lecture Direction/Comité.
 
 ---
 
 ## D. Compréhension du besoin SONABHY
 
-Le besoin n'est pas seulement de délivrer des contenus, mais de réduire durablement le risque humain lié aux attaques d'ingénierie sociale, via un dispositif continu et piloté par indicateurs.
+Le besoin SONABHY n'est pas une simple diffusion de contenus: il s'agit de réduire de manière mesurable et continue le risque humain cyber (phishing, fraude au président, ingénierie sociale, mauvaises pratiques).
 
-Nous comprenons les exigences clés du Lot 2:
-- baseline initiale à T0,
-- formation continue personnalisée,
-- auto-évaluation régulière,
-- KPI comportementaux,
-- mesure de la maturité sur 12 mois,
-- changement culturel durable.
+Notre approche est calibrée pour:
+- mesurer objectivement l'état initial;
+- corriger rapidement les comportements à risque;
+- démontrer les progrès par KPI et reporting périodique;
+- ancrer des réflexes durables dans les métiers.
 
 ---
 
-## E. Méthodologie proposée (12 mois)
+## E. Méthodologie d'exécution (12 mois)
 
-### Phase 1 (M1-M2) — Cadrage & baseline
-- Ateliers RSSI/DSI/RH
-- Segmentation populations
-- Baseline T0 (quiz + simulation initiale)
-- Rapport T0 et plan d'action priorisé
+### Phase 1 (M1-M2): Cadrage + baseline T0
+- ateliers de cadrage (DSI/RSSI/RH/Direction);
+- segmentation des populations;
+- baseline T0 (quiz + simulation + score initial);
+- rapport de référence et plan d'action.
 
-### Phase 2 (M3-M4) — Déploiement plateforme
-- Mise en production
-- Enrôlement utilisateurs
-- Activation tableaux de bord
-- Lancement des premiers parcours adaptatifs
+### Phase 2 (M3-M4): Mise en production et adoption initiale
+- paramétrage et activation plateforme;
+- enrôlement utilisateurs;
+- activation dashboard de pilotage;
+- démarrage des parcours adaptatifs.
 
-### Phase 3 (M5-M12) — Exécution continue & amélioration
-- Campagnes de simulation périodiques
-- Micro-formations ciblées post-comportement
-- Revues mensuelles KPI et ajustements
-- Revues trimestrielles Direction
-
----
-
-## F. Organisation de mission
-
-- Chef de mission / responsable de compte
-- Expert cybersécurité (scénarios + gouvernance)
-- Responsable produit/tech
-- UX designer (adoption)
-- Data analyst/reporting
-- Point focal support utilisateur
-
-Inclure mini-CV (1 page/profil clé) en annexe.
+### Phase 3 (M5-M12): Exécution continue et amélioration
+- campagnes périodiques de simulation;
+- micro-formations ciblées (JIT);
+- comité mensuel KPI;
+- revues trimestrielles Direction;
+- ajustements de contenus et scénarios.
 
 ---
 
-## G. Références similaires
+## F. Équipe de mission proposée (structure)
 
-Pour chaque référence:
-1. Client et secteur
-2. Objet de la mission
-3. Période et durée
-4. Montant
-5. Résultats obtenus (KPI)
-6. Contact de vérification (si autorisé)
-
-**Joindre obligatoirement**: copies pages de garde + signature + attestations de bonne exécution / rapports de validation.
+- Chef de mission / interlocuteur principal
+- Expert cybersécurité & ingénierie sociale
+- Ingénieur produit (plateforme / intégration)
+- UX designer (adoption utilisateur)
+- Analyste KPI / reporting
+- Support opérationnel
 
 ---
 
-## H. Engagements de performance (proposition)
+## G. Références, preuves et conformité
 
-- Diminution du taux de clic phishing vs baseline.
-- Hausse du taux de signalement.
-- Hausse de complétion des parcours.
-- Progression du score de maturité cyber.
-- Taux de couverture utilisateurs actifs.
-
-> Les cibles exactes sont ajustées après baseline T0 et validées en comité de pilotage.
-
----
-
-## I. Conformité & protection des données
-
-- Respect cadre légal Burkina Faso (données personnelles).
-- Gouvernance d'accès par rôles.
-- Journalisation des accès sensibles.
-- Rapports agrégés par défaut; individualisation strictement encadrée.
+En annexe, joindre systématiquement:
+- fiches références projets similaires;
+- pages de garde + signatures des contrats (si disponibles);
+- attestations de bonne exécution / rapports de validation;
+- pièces administratives (IFU, RCCM, identité commerciale);
+- captures et liens vers la documentation applicative.
 
 ---
 
-## J. Pourquoi notre offre sera différenciante pour la SONABHY
+## H. Engagements de performance (indicatifs, validés après T0)
 
-1. Scénarios d'ingénierie sociale contextualisés (réalisme terrain).
-2. Approche “mesure + action + preuve” et non “formation ponctuelle”.
-3. Dispositif orienté adoption (mobile-first pour utilisateurs terrain).
-4. Restitution directionnelle claire pour la prise de décision.
-5. Transfert de compétences pour pérennité après mission.
+- baisse du taux de clic phishing simulé;
+- hausse du taux de signalement;
+- hausse de complétion des modules;
+- progression de l'indice de maturité cyber;
+- couverture active durable des utilisateurs.
 
 ---
 
-## K. Liste des annexes proposées
+## I. Conclusion candidat
 
-- Annexe A: Présentation légale du cabinet
-- Annexe B: Organigramme de mission
-- Annexe C: CV experts clés
-- Annexe D: Références et attestations
-- Annexe E: Méthode détaillée + planning
-- Annexe F: Extrait maquettes / captures plateforme
-- Annexe G: Engagements qualité et sécurité
-
+WEND TECH s'engage sur une approche orientée résultats, exécutable rapidement, compatible avec les contraintes opérationnelles locales et pilotée par des preuves mesurables.
