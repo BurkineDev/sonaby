@@ -30,7 +30,8 @@ export default async function AdminLayout({
   return (
     <div className="min-h-screen flex" style={{ backgroundColor: "#F8F9FC" }}>
       <AdminSidebar role={profile.role} fullName={profile.full_name} />
-      <main className="flex-1 min-w-0 overflow-x-hidden">{children}</main>
+      {/* pb-20 on mobile reserves space for the bottom nav bar */}
+      <main className="flex-1 min-w-0 overflow-x-hidden pb-20 md:pb-0">{children}</main>
     </div>
   );
 }

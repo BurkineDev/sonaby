@@ -108,7 +108,7 @@ export default async function ReportsPage() {
   return (
     <div className="p-6 space-y-8">
       {/* En-tête */}
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
           <h1 className="text-2xl font-bold text-fg-DEFAULT">Rapports direction</h1>
           <p className="text-sm text-fg-muted mt-0.5">
@@ -116,7 +116,7 @@ export default async function ReportsPage() {
           </p>
         </div>
         {/* Export PDF */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <Link
             href="/admin/reports/export?days=30"
             className="flex items-center gap-2 text-sm font-medium border border-border rounded-lg px-3 py-2 hover:bg-bg-subtle transition-colors text-fg-DEFAULT"
@@ -236,7 +236,7 @@ export default async function ReportsPage() {
         {!deptScores || deptScores.length === 0 ? (
           <p className="text-sm text-fg-muted">Données insuffisantes.</p>
         ) : (
-          <div className="bg-white rounded-xl border border-border overflow-hidden">
+          <div className="bg-white rounded-xl border border-border overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-bg-subtle border-b border-border">
                 <tr>

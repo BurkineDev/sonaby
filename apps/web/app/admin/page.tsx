@@ -67,12 +67,12 @@ export default async function AdminDashboard() {
     <div className="min-h-screen" style={{ backgroundColor: "#F8F9FC" }}>
       {/* ── Hero header ──────────────────────────────────────────────────── */}
       <div
-        className="px-8 py-8"
+        className="px-4 py-6 sm:px-8 sm:py-8"
         style={{
           background: "linear-gradient(135deg, #163061 0%, #1F3F7A 60%, #2F5696 100%)",
         }}
       >
-        <div className="flex items-start justify-between">
+        <div className="flex items-start justify-between flex-wrap gap-3">
           <div>
             {/* Surtitre */}
             <div className="flex items-center gap-2 mb-2">
@@ -113,7 +113,7 @@ export default async function AdminDashboard() {
 
         {/* ── Métriques rapides dans le header ── */}
         {latest && (
-          <div className="mt-6 grid grid-cols-3 gap-4">
+          <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div
               className="rounded-xl px-4 py-3"
               style={{ backgroundColor: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)" }}
@@ -159,7 +159,7 @@ export default async function AdminDashboard() {
       </div>
 
       {/* ── Contenu principal ──────────────────────────────────────────────── */}
-      <div className="px-8 py-8 space-y-8">
+      <div className="px-4 py-6 sm:px-8 sm:py-8 space-y-8">
 
         {/* Ligne 1 : CMI jauge + KPIs phishing */}
         <div>

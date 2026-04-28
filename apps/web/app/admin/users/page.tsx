@@ -101,7 +101,7 @@ export default async function UsersPage() {
       </div>
 
       {/* Stats rapides */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {[
           { label: "Utilisateurs actifs", value: activeCount, sub: `sur ${users.length} total` },
           { label: "Consentement phishing", value: consentCount, sub: "utilisateurs ciblables" },
