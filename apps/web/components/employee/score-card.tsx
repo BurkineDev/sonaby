@@ -103,7 +103,7 @@ export function ScoreCard({ score, delta, snapshotDate }: Props) {
         </div>
 
         {/* ── Arc + infos ───────────────────────────────────────────────── */}
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-3 sm:gap-5">
           {/* Arc SVG circulaire */}
           <div className="relative shrink-0">
             {/* Halo glow derrière l'arc */}
@@ -112,8 +112,7 @@ export function ScoreCard({ score, delta, snapshotDate }: Props) {
               style={{ backgroundColor: accentColor }}
             />
             <svg
-              width="128"
-              height="128"
+              className="w-24 h-24 sm:w-32 sm:h-32"
               viewBox="0 0 128 128"
               role="img"
               aria-label={`Score de vigilance : ${scoreRounded} sur 100 — ${label}`}

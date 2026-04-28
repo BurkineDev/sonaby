@@ -85,15 +85,17 @@ export default async function AdminDashboard() {
                 className="text-xs font-semibold uppercase tracking-widest"
                 style={{ color: "#E8A228" }}
               >
-                Société Nationale Burkinabè des Hydrocarbures
+                <span className="hidden sm:inline">Société Nationale Burkinabè des Hydrocarbures</span>
+                <span className="sm:hidden">SONABHY</span>
               </span>
             </div>
 
-            <h1 className="text-2xl font-bold text-white">
+            <h1 className="text-xl sm:text-2xl font-bold text-white">
               Tableau de bord direction
             </h1>
-            <p className="text-sm mt-1" style={{ color: "rgba(255,255,255,0.65)" }}>
-              CyberGuard · Programme de sensibilisation Lot 2 · {formatDateTime(now)}
+            <p className="text-xs sm:text-sm mt-1" style={{ color: "rgba(255,255,255,0.65)" }}>
+              CyberGuard · Lot 2
+              <span className="hidden sm:inline"> · {formatDateTime(now)}</span>
             </p>
           </div>
 
@@ -113,45 +115,51 @@ export default async function AdminDashboard() {
 
         {/* ── Métriques rapides dans le header ── */}
         {latest && (
-          <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="mt-5 grid grid-cols-3 gap-2 sm:gap-4">
             <div
-              className="rounded-xl px-4 py-3"
+              className="rounded-xl px-2.5 py-2.5 sm:px-4 sm:py-3"
               style={{ backgroundColor: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)" }}
             >
-              <div className="flex items-center gap-2 mb-1">
-                <BarChart3 className="w-3.5 h-3.5" style={{ color: "#E8A228" }} aria-hidden="true" />
-                <p className="text-xs font-medium" style={{ color: "rgba(255,255,255,0.6)" }}>CMI Global</p>
+              <div className="flex items-center gap-1.5 mb-1">
+                <BarChart3 className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" style={{ color: "#E8A228" }} aria-hidden="true" />
+                <p className="text-xs font-medium truncate" style={{ color: "rgba(255,255,255,0.6)" }}>CMI Global</p>
               </div>
-              <p className="text-2xl font-bold text-white font-mono">
+              <p className="text-xl sm:text-2xl font-bold text-white font-mono">
                 {Math.round(cmi ?? 0)}
-                <span className="text-sm font-normal ml-1" style={{ color: "rgba(255,255,255,0.5)" }}>/100</span>
+                <span className="text-xs sm:text-sm font-normal ml-0.5" style={{ color: "rgba(255,255,255,0.5)" }}>/100</span>
               </p>
             </div>
 
             <div
-              className="rounded-xl px-4 py-3"
+              className="rounded-xl px-2.5 py-2.5 sm:px-4 sm:py-3"
               style={{ backgroundColor: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)" }}
             >
-              <div className="flex items-center gap-2 mb-1">
-                <Users2 className="w-3.5 h-3.5" style={{ color: "#E8A228" }} aria-hidden="true" />
-                <p className="text-xs font-medium" style={{ color: "rgba(255,255,255,0.6)" }}>Utilisateurs actifs</p>
+              <div className="flex items-center gap-1.5 mb-1">
+                <Users2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" style={{ color: "#E8A228" }} aria-hidden="true" />
+                <p className="text-xs font-medium truncate" style={{ color: "rgba(255,255,255,0.6)" }}>
+                  <span className="hidden sm:inline">Utilisateurs actifs</span>
+                  <span className="sm:hidden">Utilisateurs</span>
+                </p>
               </div>
-              <p className="text-2xl font-bold text-white font-mono">
+              <p className="text-xl sm:text-2xl font-bold text-white font-mono">
                 {latest.user_count ?? 0}
               </p>
             </div>
 
             <div
-              className="rounded-xl px-4 py-3"
+              className="rounded-xl px-2.5 py-2.5 sm:px-4 sm:py-3"
               style={{ backgroundColor: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)" }}
             >
-              <div className="flex items-center gap-2 mb-1">
-                <ShieldCheck className="w-3.5 h-3.5" style={{ color: "#E8A228" }} aria-hidden="true" />
-                <p className="text-xs font-medium" style={{ color: "rgba(255,255,255,0.6)" }}>Taux complétion</p>
+              <div className="flex items-center gap-1.5 mb-1">
+                <ShieldCheck className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" style={{ color: "#E8A228" }} aria-hidden="true" />
+                <p className="text-xs font-medium truncate" style={{ color: "rgba(255,255,255,0.6)" }}>
+                  <span className="hidden sm:inline">Taux complétion</span>
+                  <span className="sm:hidden">Complétion</span>
+                </p>
               </div>
-              <p className="text-2xl font-bold text-white font-mono">
+              <p className="text-xl sm:text-2xl font-bold text-white font-mono">
                 {completionRate ?? "—"}
-                {completionRate && <span className="text-sm font-normal ml-0.5" style={{ color: "rgba(255,255,255,0.5)" }}>%</span>}
+                {completionRate && <span className="text-xs sm:text-sm font-normal ml-0.5" style={{ color: "rgba(255,255,255,0.5)" }}>%</span>}
               </p>
             </div>
           </div>
